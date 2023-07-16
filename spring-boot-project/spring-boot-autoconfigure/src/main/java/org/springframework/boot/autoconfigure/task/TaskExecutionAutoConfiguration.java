@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnVirtualThreads;
 import org.springframework.boot.autoconfigure.task.TaskExecutionProperties.Shutdown;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.task.TaskExecutorBuilder;
@@ -78,6 +79,13 @@ public class TaskExecutionAutoConfiguration {
 	@ConditionalOnMissingBean(Executor.class)
 	public ThreadPoolTaskExecutor applicationTaskExecutor(TaskExecutorBuilder builder) {
 		return builder.build();
+	}
+
+	@Lazy
+	@Bean
+	@ConditionalOnVirtualThreads
+	public TaskExecutionVirtualThreadsCustomizer taskExecutionVirtualThreadsCustomizer() {
+		 return new TaskExecutionVirtualThreadsCustomizer();
 	}
 
 }
